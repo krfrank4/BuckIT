@@ -18,14 +18,14 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: BukIT
+title: BuckIT
 email: buckIT@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
  Your journey to financial literacy starts here. Explore resources, take our interactive quiz, and get personalized tips on managing your finances
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: BukIT
-github_username: bukIT
+twitter_username: BuckIT
+github_username: buckIT
 
 # Build settings
 theme: minima
@@ -51,6 +51,6 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-domain: bukIT.github.io
+domain: buckIT.github.io
 url: https://bukIT.github.io
 baseurl: /buckIT/
