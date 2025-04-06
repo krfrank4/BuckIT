@@ -56,20 +56,33 @@
       border-radius: 5px;
     }
     .video-section {
-  position: relative;
-  overflow: hidden;
-  height: 100vh; /* Full height */
-}
-
-.background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures the video covers the entire section */
-  z-index: -1; /* Sends the video behind other content */
-}
+      position: relative;
+      overflow: hidden;
+      height: 100vh; /* Full height */
+    }
+    .background-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures the video covers the entire section */
+      z-index: -1; /* Sends the video behind other content */
+    }
+    .section {
+      padding: 40px;
+      background-color: #e6f7ff; /* Light sky-blue background */
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 800px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .section h2 {
+      color: #32CD32;
+    }
+    .section p {
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -83,25 +96,47 @@
 </section>
   
 <main class="page-content" aria-label="Content">
-<section class="video-section">
-  <video autoplay muted loop class="background-video">
-    <source src="https://www.canva.com/design/DAGjywp9hVw/H0gpDFPt0WlHoLKvNcoumw/watch?utm_content=DAGjywp9hVw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd1ce0950be" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</section>
 
+  <!-- Video Section -->
+  <section class="video-section">
+    <video autoplay muted loop class="background-video">
+      <source src="assets/BUCKit.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </section>
+
+  <!-- Hero Section -->
   <div class="wrapper">
+    <section class="hero">
+      <h2>Welcome to BuckIT!</h2>
+      <p>Your journey to financial literacy starts here. Explore resources, take our interactive quiz, and get personalized tips on managing your finances.</p>
+      <a class="button" href="/buckIT/get-started/">Get Started</a>
+    </section>
 
-<section class="hero">
-  <h2>Welcome to BuckIT!</h2>
-  <p>Your journey to financial literacy starts here. Explore resources, take our interactive quiz, and get personalized tips on managing your finances.</p>
-  <a class="button" href="/buckIT/get-started">Get Started</a>
-</section>
+    <!-- Navigation Links -->
+    <div class="nav-links">
+      <a href="/buckIT/quiz">BuckIT Financial Literacy Quiz</a>
+      <a href="/buckIT/calculator">Financial Calculator</a>
+      <a href="/buckIT/fill-my-buckits">Fill My BuckITs</a>
+      <a href="/buckIT/about/">About BuckIT</a>
+    </div>
 
-<div class="nav-links">
-  <a href="/buckIT/quiz">BuckIT Financial Literacy Quiz</a>
-  <a href="/buckIT/about/">About BuckIT</a>
-</div>
+    <!-- Financial Calculator Section -->
+    <section class="section" id="financial-calculator">
+      <h2>Financial Calculator</h2>
+      <p>Use our Financial Calculator to plan your budget, track expenses, and set savings goals for a brighter financial future.</p>
+      <a class="button" href="/buckIT/calculator">Try the Calculator</a>
+    </section>
 
+    <!-- Fill My BuckITs Section -->
+    <section class="section" id="fill-my-buckits">
+      <h2>Fill My BuckITs</h2>
+      <p>Get personalized tips and actionable advice to fill your BuckITs with smart financial decisions.</p>
+      <a class="button" href="/buckIT/fill-my-buckits">Explore Now</a>
+    </section>
+  </div>
+
+</main>
 </body>
 </html>
+
