@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bucket Goals</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fef5e7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 36px;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .bucket {
+            position: relative;
+            width: 200px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border: 2px solid black;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        .bucket h2 {
+            margin-bottom: 10px;
+        }
+        .bucket-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            border: 3px solid black;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #d3d3d3;
+        }
+        .water {
+            width: 100%;
+            height: 0;
+            position: absolute;
+            bottom: 0;
+        }
+        .water.past { background-color: #00bfff; } /* Blue water for Past */
+        .water.present { background-color: #90ee90; } /* Green water for Present */
+        .water.future { background-color: #87ceeb; } /* Light blue water for Future */
+        #progress-text {
+            position: absolute;
+            top: 40%;
+            left: 0;
+            width: 100%;
+            color: black;
+            font-weight: bold;
+        }
+        label, input, button {
+            margin: 5px;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #ff0;
+            animation: fall 3s infinite ease-in-out;
+            border-radius: 50%;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(800px) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Bucket Goals</h1>
+    <div class="container">
+        <!-- Past -->
+        <div class="bucket">
+            <h2>Past: Debts</h2>
+            <div class="bucket-container">
+                <div class="water past" id="past-water"></div>
+                <p id="past-progress-text">Start paying to fill the bucket!</p>
+            </div>
+            <label for="past-goalName">Goal Name:</label>
+            <input type="text" id="past-goalName" placeholder="Enter your goal name"><br>
+            <label for="past-goalAmount">Goal Amount ($):</label>
+            <input type="number" id="past-goalAmount" placeholder="Enter your goal amount"><br>
+            <button id="past-button" onclick="makeDeposit('past')">Make a Deposit</button>
+        </div>
+
+        <!-- Present -->
+        <div class="bucket">
+            <h2>Present: Budgets</h2>
+            <div class="bucket-container">
+                <div class="water present" id="present-water"></div>
+                <p id="present-progress-text">Stick to your budget plan!</p>
+            </div>
+            <label for="present-goalName">Goal Name:</label>
+            <input type="text" id="present-goalName" placeholder="Enter your goal name"><br>
+            <label for="present-goalAmount">Goal Amount ($):</label>
+            <input type="number" id="present-goalAmount" placeholder="Enter your goal amount"><br>
+            <button id="present-button" onclick="makeDeposit('present')">Make a Deposit</button>
+        </div>
+
+        <!-- Future -->
+        <div class="bucket">
+            <h2>Future: Savings</h2>
+            <div class="bucket-container">
+                <div class="water future" id="future-water"></div>
+                <p id="future-progress-text">Save for a brighter future!</p>
+            </div>
+            <label for="future-goalName">Goal Name:</label>
+            <input type="text" id="future-goalName" placeholder="Enter your goal name"><br>
+            <label for="future-goalAmount">Goal Amount ($):</label>
+            <input type="number" id="future-goalAmount" placeholder="Enter your goal amount"><br>
+            <button id="future-button" onclick="makeDeposit('future')">Make a Deposit</button>
+        </div>
+    </div>
+
+    <script>
+        const goals = {
+            past: { totalDeposited: 0, goalReached: false },
+            present: { totalDeposited: 0, goalReached: false },
+            future: { totalDeposited: 0, goalReached: false },
+        };
+
+        function makeDeposit(type) {
+            const goal = goals[type];
+            if (goal.goalReached) return;
+
+            const goalAmount = parseFloat(document.getElementById(`${type}-goalAmount`).value);
+            if (isNaN(goalAmount) || goalAmount <= 0) {
+                alert("Please enter a valid goal amount.");
+                return;
+            }
+
+            const deposit = parseFloat(prompt("Enter deposit amount:"));
+            if (!isNaN(deposit) && deposit > 0) {
+                goal.totalDeposited += deposit;
+                const percentage = Math.min((goal.totalDeposited / goalAmount) * 100, 100);
+                document.getElementById(`${type}-water`).style.height = percentage + "%";
+                document.getElementById(`${type}-progress-text`).textContent =
+                    `$${(goalAmount - goal.totalDeposited).toFixed(2)} left! Keep going!`;
+
+                if (goal.totalDeposited >= goalAmount) {
+                    goalAchieved(type);
+                }
+            } else {
+                alert("Please enter a valid deposit amount.");
+            }
+        }
+
+        function goalAchieved(type) {
+            const goal = goals[type];
+            goal.goalReached = true;
+            document.getElementById(`${type}-progress-text`).textContent = `🎉 ${capitalize(type)} Goal Achieved! 🎉`;
+            document.getElementById(`${type}-button`).disabled = true;
+            startConfetti();
+        }
+
+        function startConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = Math.random() * window.innerWidth + "px";
+                confetti.style.backgroundColor = randomColor();
+                document.body.appendChild(confetti);
+
+                setTimeout(() => document.body.removeChild(confetti), 3000);
+            }
+        }
+
+        function randomColor() {
+            const colors = ["#ff0", "#f00", "#0f0", "#00f", "#f0f", "#0ff"];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+</html>
