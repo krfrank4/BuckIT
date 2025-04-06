@@ -53,6 +53,6 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-domain: bukIT.github.
+domain: bukIT.github.io
 url: https://bukIT.github.io
 baseurl: /buckIT/
