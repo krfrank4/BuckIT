@@ -1,4 +1,4 @@
 layout: page
 title: "quiz"
-permalink:/quiz/
+permalink:/quiz
 
