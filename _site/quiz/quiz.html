@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuckIT Financial Quiz</title>
+  <link rel ="canonical" href="http://localhost:4000/buckIT/quiz.html/" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      color: #333;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .results-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+    .buckit-header h1 {
+      color: #4CAF50;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    .buckit-header p {
+      font-size: 16px;
+      color: #666;
+    }
+    .result-item {
+      margin-bottom: 20px;
+      border-left: 4px solid #4CAF50;
+      padding-left: 15px;
+    }
+    .explanation {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+    .final-score h3 {
+      font-size: 20px;
+      color: #2c3e50;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>BuckIT Financial Literacy Quiz</h2>
+
+    <div class="question">
+      <p>Which age range do you fall into?</p>
+      <label><input type="radio" name="age" value="18-24"> 18–24</label><br>
+      <label><input type="radio" name="age" value="25-34"> 25–34</label><br>
+      <label><input type="radio" name="age" value="35-44"> 35–44</label><br>
+      <label><input type="radio" name="age" value="45-54"> 45–54</label><br>
+      <label><input type="radio" name="age" value="55-64"> 55–64</label><br>
+      <label><input type="radio" name="age" value="65+"> 65+</label>
+    </div>
+
+    <div class="question">
+      <p>What percentage of your monthly income do you typically save?</p>
+      <label><input type="radio" name="savings" value="Less than 5%"> Less than 5%</label><br>
+      <label><input type="radio" name="savings" value="5-10%"> 5–10%</label><br>
+      <label><input type="radio" name="savings" value="11-20%"> 11–20%</label><br>
+      <label><input type="radio" name="savings" value="More than 20%"> More than 20%</label>
+    </div>
+
+    <div class="question">
+      <p>Do you have an emergency fund to cover unexpected expenses?</p>
+      <label><input type="radio" name="emergency" value="No"> No</label><br>
+      <label><input type="radio" name="emergency" value="1-3 months"> Yes, 1–3 months</label><br>
+      <label><input type="radio" name="emergency" value="3-6 months"> Yes, 3–6 months</label><br>
+      <label><input type="radio" name="emergency" value="More than 6 months"> Yes, more than 6 months</label>
+    </div>
+
+    <div class="question">
+      <p>How would you describe your level of comfort with debt?</p>
+      <label><input type="radio" name="debt" value="Avoid debt"> I avoid debt whenever possible</label><br>
+      <label><input type="radio" name="debt" value="Minimize debt"> I'm comfortable with some debt, but try to minimize it</label><br>
+      <label><input type="radio" name="debt" value="Strategic debt"> I use debt strategically for investments or major purchases</label><br>
+      <label><input type="radio" name="debt" value="Stressed by debt"> I have a significant amount of debt and it causes me stress</label>
+    </div>
+
+    <div class="question">
+      <p>Do you have a budget or track your spending regularly?</p>
+      <label><input type="radio" name="budget" value="No tracking"> No, I don't track my spending</label><br>
+      <label><input type="radio" name="budget" value="Rough idea"> I have a rough idea of my spending</label><br>
+      <label><input type="radio" name="budget" value="App or spreadsheet"> I use a budgeting app or spreadsheet</label><br>
+      <label><input type="radio" name="budget" value="Detailed budget"> I have a detailed budget and review it regularly</label>
+    </div>
+
+    <div class="question">
+      <p>How confident are you in your understanding of basic financial concepts?</p>
+      <label><input type="radio" name="confidence" value="Not confident"> Not confident at all</label><br>
+      <label><input type="radio" name="confidence" value="Slightly confident"> Slightly confident</label><br>
+      <label><input type="radio" name="confidence" value="Moderately confident"> Moderately confident</label><br>
+      <label><input type="radio" name="confidence" value="Very confident"> Very confident</label>
+    </div>
+
+    <button onclick="submitQuiz()">Done</button>
+    <button id="downloadBtn" style="display:none; margin-top: 20px;" onclick="downloadPDF()">Download as PDF</button>
+    <div id="results" class="results-container"></div>
+  </div>
+
+  <script>
+    const scoreMap = {
+      savings: {
+        "Less than 5%": 0,
+        "5-10%": 1,
+        "11-20%": 2,
+        "More than 20%": 3
+      },
+      emergency: {
+        "No": 0,
+        "1-3 months": 1,
+        "3-6 months": 2,
+        "More than 6 months": 3
+      },
+      debt: {
+        "Stressed by debt": 0,
+        "Minimize debt": 1,
+        "Avoid debt": 2,
+        "Strategic debt": 3
+      },
+      budget: {
+        "No tracking": 0,
+        "Rough idea": 1,
+        "App or spreadsheet": 2,
+        "Detailed budget": 3
+      },
+      confidence: {
+        "Not confident": 0,
+        "Slightly confident": 1,
+        "Moderately confident": 2,
+        "Very confident": 3
+      }
+    };
+
+    const explanations = {
+      savings: {
+        "Less than 5%": "Consider setting up automatic savings to build momentum.",
+        "5-10%": "A good start, but aim to increase it as your income grows.",
+        "11-20%": "You're on the right track — keep it up!",
+        "More than 20%": "Excellent savings discipline!"
+      },
+      emergency: {
+        "No": "Start building an emergency fund to reduce financial stress.",
+        "1-3 months": "You're somewhat prepared. Aim for 6 months.",
+        "3-6 months": "Well done — you're better prepared than most.",
+        "More than 6 months": "You're in a strong position for financial shocks."
+      },
+      debt: {
+        "Avoid debt": "Great! Staying debt-free is a strong financial base.",
+        "Minimize debt": "Smart approach — keep tracking and minimizing.",
+        "Strategic debt": "If done wisely, this can boost your long-term wealth.",
+        "Stressed by debt": "Consider creating a payoff plan or speaking to a financial advisor."
+      },
+      budget: {
+        "No tracking": "Budgeting is key. Start small with a free app.",
+        "Rough idea": "Try a budgeting tool to gain more clarity.",
+        "App or spreadsheet": "You're managing things well — nice work!",
+        "Detailed budget": "Impressive discipline and awareness!"
+      },
+      confidence: {
+        "Not confident": "Learning the basics can make a big difference — you're not alone!",
+        "Slightly confident": "Keep exploring — there's always more to learn.",
+        "Moderately confident": "You're doing well — continue sharpening your skills.",
+        "Very confident": "You're financially savvy! Share your knowledge with others."
+      }
+    };
+
+    function calculateLevel(score) {
+      if (score <= 5) return "Beginner 🟠";
+      if (score <= 10) return "Intermediate 🟡";
+      return "Advanced 🟢";
+    }
+
+    function submitQuiz() {
+      const responses = {};
+      const questions = ['age', 'savings', 'emergency', 'debt', 'budget', 'confidence'];
+      const resultDiv = document.getElementById('results');
+      resultDiv.innerHTML = `
+        <div class="buckit-header">
+          <h1>BuckIT Financial Wellness Quiz</h1>
+          <p style="margin-bottom: 20px;">Thanks for taking the quiz! Here's your personalized financial snapshot based on your responses.</p>
+        </div>
+      `;
+
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        const value = selected ? selected.value : 'No answer';
+        responses[q] = value;
+
+        if (scoreMap[q] && scoreMap[q][value] !== undefined) {
+          score += scoreMap[q][value];
+        }
+
+        resultDiv.innerHTML += `
+          <div class="result-item">
+            <strong>Q${i + 1}:</strong> ${value}
+            ${explanations[q]?.[value] ? `<div class="explanation">${explanations[q][value]}</div>` : ''}
+          </div>
+        `;
+      });
+
+      const level = calculateLevel(score);
+      resultDiv.innerHTML += `
+        <div class="final-score">
+          <h3>Your Financial Wellness Level: <strong>${level}</strong></h3>
+        </div>
+      `;
+
+      document.getElementById("downloadBtn").style.display = "inline-block";
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById("results");
+      const opt = {
+        margin:       0.5,
+        filename:     'buckit_financial_quiz_results.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().from(element).set(opt).save();
+    }
+  </script>
+</body>
+</html>
