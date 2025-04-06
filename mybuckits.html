@@ -53,13 +53,15 @@
         .water.past { background-color: #00bfff; } /* Blue water for Past */
         .water.present { background-color: #90ee90; } /* Green water for Present */
         .water.future { background-color: #87ceeb; } /* Light blue water for Future */
-        #progress-text {
+        .congrats-message {
             position: absolute;
-            top: 40%;
-            left: 0;
             width: 100%;
-            color: black;
+            top: 40%;
             font-weight: bold;
+            font-size: 16px;
+            color: #ff0000;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease-in-out;
         }
         label, input, button {
             margin: 5px;
@@ -71,6 +73,7 @@
             background-color: #ff0;
             animation: fall 3s infinite ease-in-out;
             border-radius: 50%;
+            pointer-events: none;
         }
         @keyframes fall {
             0% { transform: translateY(0) rotate(0deg); }
@@ -87,6 +90,7 @@
             <div class="bucket-container">
                 <div class="water past" id="past-water"></div>
                 <p id="past-progress-text">Start paying to fill the bucket!</p>
+                <p class="congrats-message" id="past-congrats">🎉 Congrats! 🎉</p>
             </div>
             <label for="past-goalName">Goal Name:</label>
             <input type="text" id="past-goalName" placeholder="Enter your goal name"><br>
@@ -101,6 +105,7 @@
             <div class="bucket-container">
                 <div class="water present" id="present-water"></div>
                 <p id="present-progress-text">Stick to your budget plan!</p>
+                <p class="congrats-message" id="present-congrats">🎉 Congrats! 🎉</p>
             </div>
             <label for="present-goalName">Goal Name:</label>
             <input type="text" id="present-goalName" placeholder="Enter your goal name"><br>
@@ -115,6 +120,7 @@
             <div class="bucket-container">
                 <div class="water future" id="future-water"></div>
                 <p id="future-progress-text">Save for a brighter future!</p>
+                <p class="congrats-message" id="future-congrats">🎉 Congrats! 🎉</p>
             </div>
             <label for="future-goalName">Goal Name:</label>
             <input type="text" id="future-goalName" placeholder="Enter your goal name"><br>
@@ -160,7 +166,8 @@
         function goalAchieved(type) {
             const goal = goals[type];
             goal.goalReached = true;
-            document.getElementById(`${type}-progress-text`).textContent = `🎉 ${capitalize(type)} Goal Achieved! 🎉`;
+            document.getElementById(`${type}-progress-text`).textContent = "";
+            document.getElementById(`${type}-congrats`).style.opacity = 1; // Show the congrats message
             document.getElementById(`${type}-button`).disabled = true;
             startConfetti();
         }
@@ -180,10 +187,6 @@
         function randomColor() {
             const colors = ["#ff0", "#f00", "#0f0", "#00f", "#f0f", "#0ff"];
             return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     </script>
 </body>
