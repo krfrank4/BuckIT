@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="canonical" href="http://localhost:4000/buckIT/cal.html/" />
+    <title>Financial Calculator - BuckIT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tabs button {
+            flex: 1;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tabs button:hover {
+            background-color: #0056b3;
+        }
+        .tabs button.active {
+            background-color: #0056b3;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Financial Calculator</h1>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="debt">Debt</button>
+            <button class="tab-button" data-tab="budgeting">Budgeting</button>
+            <button class="tab-button" data-tab="saving-goals">Saving Goals</button>
+        </div>
+        <div id="debt" class="tab-content active">
+            <h2>Debt Calculator</h2>
+            <form id="debt-form">
+                <label for="debt-amount">Total Debt Amount:</label>
+                <input type="number" id="debt-amount" required>
+                <label for="interest-rate">Interest Rate (%):</label>
+                <input type="number" id="interest-rate" step="0.01" required>
+                <label for="payoff-period">Payoff Period (years):</label>
+                <input type="number" id="payoff-period" required>
+                <button type="submit">Calculate</button>
+            </form>
+            <div id="debt-result"></div>
+        </div>
+        <div id="budgeting" class="tab-content">
+            <h2>Budgeting Calculator</h2>
+            <form id="budgeting-form">
+                <label for="income">Monthly Income:</label>
+                <input type="number" id="income" required>
+                <label for="expenses">Monthly Expenses:</label>
+                <input type="number" id="expenses" required>
+                <button type="submit">Calculate</button>
+            </form>
+            <div id="budgeting-result"></div>
+        </div>
+        <div id="saving-goals" class="tab-content">
+            <h2>Saving Goals Calculator</h2>
+            <form id="saving-goals-form">
+                <label for="saving-goal">Saving Goal Amount:</label>
+                <input type="number" id="saving-goal" required>
+                <label for="saving-period">Saving Period (months):</label>
+                <input type="number" id="saving-period" required>
+                <button type="submit">Calculate</button>
+            </form>
+            <div id="saving-goals-result"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(button.getAttribute('data-tab')).classList.add('active');
+                });
+            });
+
+            document.getElementById('debt-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const debtAmount = parseFloat(document.getElementById('debt-amount').value);
+                const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
+                const payoffPeriod = parseInt(document.getElementById('payoff-period').value);
+                const monthlyRate = interestRate / 12;
+                const numberOfPayments = payoffPeriod * 12;
+                const monthlyPayment = (debtAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
+                const totalInterest = (monthlyPayment * numberOfPayments) - debtAmount;
+                document.getElementById('debt-result').innerHTML = `
+                    <p>Monthly Payment: $${monthlyPayment.toFixed(2)}</p>
+                    <p>Total Interest Paid: $${totalInterest.toFixed(2)}</p>
+                `;
+            });
+
+            document.getElementById('budgeting-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const income = parseFloat(document.getElementById('income').value);
+                const expenses = parseFloat(document.getElementById('expenses').value);
+                const savings = income - expenses;
+                document.getElementById('budgeting-result').innerHTML = `
+                    <p>Monthly Savings: $${savings.toFixed(2)}</p>
+                `;
+            });
+
+            document.getElementById('saving-goals-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const savingGoal = parseFloat(document.getElementById('saving-goal').value);
+                const savingPeriod = parseInt(document.getElementById('saving-period').value);
+                const monthlySaving = savingGoal / savingPeriod;
+                document.getElementById('saving-goals-result').innerHTML = `
+                    <p>Monthly Saving Required: $${monthlySaving.toFixed(2)}</p>
+                    <p>Total Saving Goal: $${savingGoal.toFixed(2)}</p>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
