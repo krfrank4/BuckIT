@@ -1,6 +1,8 @@
+---
 layout: page
-title: "About"
+title: About
 permalink: /about/
+---
 
 # Inspiration
 - BuckIT was inspired by all members of the group believing we needed an app to better pay off debts of the past, plan budgeting for the present, and save for goals for the future. All of our banking, credit, and financial applications currently are either too complicated or too boring, and we needed an innovative idea for a new website that we would be excited to use ourselves. In short, we needed to keep afloat and save a Buck, hence BuckIT.
